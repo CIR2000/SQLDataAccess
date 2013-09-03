@@ -36,16 +36,6 @@ namespace Amica.Data
         /// <summary>
         /// 
         /// </summary>
-        public string DataSourceName { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Authentication Autentication { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="request"></param>
         /// <returns></returns>
