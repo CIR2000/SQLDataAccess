@@ -58,6 +58,11 @@ namespace Amica.Data
         /// <summary>
         /// 
         /// </summary>
+        public string DataSourcePassword { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
         protected new string ParseFilters(IList<Filter> filters)
