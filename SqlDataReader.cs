@@ -12,18 +12,18 @@ namespace Amica.Data
         /// <summary>
         /// 
         /// </summary>
-        private Dictionary <ComparisonOperator, OperatorInfo> OpDict = new Dictionary<ComparisonOperator,OperatorInfo>()
+        private Dictionary <Comparison, OperatorInfo> OpDict = new Dictionary<Comparison, OperatorInfo>()
         {
-            { ComparisonOperator.BeginsWith, new OperatorInfo {Operator=" LIKE ", Suffix="%"}},
-            { ComparisonOperator.Contains, new OperatorInfo {Operator=" LIKE ", Prefix="%", Suffix="%"}},
-            { ComparisonOperator.EndsWith, new OperatorInfo {Operator=" LIKE ", Prefix="%"}},
-            { ComparisonOperator.NotContains, new OperatorInfo {Operator=" NOT LIKE ", Prefix="%", Suffix="%"}},
-            { ComparisonOperator.Equal, new OperatorInfo {Operator=" = "}},
-            { ComparisonOperator.NotEqual, new OperatorInfo {Operator=" <> "}},
-            { ComparisonOperator.GreaterThan, new OperatorInfo {Operator=" > "}},
-            { ComparisonOperator.GreaterThenOrEqual, new OperatorInfo {Operator=" >= "}},
-            { ComparisonOperator.LessThan, new OperatorInfo {Operator=" < "}},
-            { ComparisonOperator.LessThanOrEqual, new OperatorInfo {Operator=" <= "}}
+            { Comparison.BeginsWith, new OperatorInfo {Operator=" LIKE ", Suffix="%"}},
+            { Comparison.Contains, new OperatorInfo {Operator=" LIKE ", Prefix="%", Suffix="%"}},
+            { Comparison.EndsWith, new OperatorInfo {Operator=" LIKE ", Prefix="%"}},
+            { Comparison.NotContains, new OperatorInfo {Operator=" NOT LIKE ", Prefix="%", Suffix="%"}},
+            { Comparison.Equal, new OperatorInfo {Operator=" = "}},
+            { Comparison.NotEqual, new OperatorInfo {Operator=" <> "}},
+            { Comparison.GreaterThan, new OperatorInfo {Operator=" > "}},
+            { Comparison.GreaterThenOrEqual, new OperatorInfo {Operator=" >= "}},
+            { Comparison.LessThan, new OperatorInfo {Operator=" < "}},
+            { Comparison.LessThanOrEqual, new OperatorInfo {Operator=" <= "}}
         };
 
         /// <summary>
@@ -33,13 +33,7 @@ namespace Amica.Data
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public override Response<T> Get<T>(GetRequest request)
+        public override Response<T> Get<T>(IGetRequest request)
         {
             return null;
         }
@@ -50,7 +44,7 @@ namespace Amica.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override Response<T> Get<T>(GetRequestItem request)
+        public override Response<T> Get<T>(IGetRequestItem request)
         {
             return null;
         }
@@ -65,18 +59,29 @@ namespace Amica.Data
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        protected new string ParseFilters(IList<Filter> filters)
+        protected new string ParseFilters(IList<IFilter> filters)
         {
             string s = "";
             string concat = "";
+            Filter ff;
+            FiltersGroup fg;
 
-            foreach (Filter f in filters)
+            foreach (IFilter f in filters)
             {
-                s += concat.Length > 0 ? concat : "";
-                s += f.Name + OpDict[f.Operator].Operator + (f.Value == null ? "NULL" : FormatSQLValue(f));
-                concat = " " + f.Concatenation.ToString().ToUpper() + " ";
-                if (f.Filters != null && f.Filters.Count > 0)
-                    s += concat + "(" + ParseFilters(f.Filters) + ")";
+                if (f.GetType().Name == "FiltersGroup")
+                {
+                    fg = (FiltersGroup)f;
+                    if (fg.Filters.Count > 0)
+                        s += concat + "(" + ParseFilters(fg.Filters) + ")";
+                    concat = " " + fg.Concatenator.ToString().ToUpper() + " ";
+                }
+                else if (f.GetType().Name == "Filter")
+                {
+                    ff = (Filter)f;
+                    s += concat;
+                    s += ff.Field + OpDict[ff.Comparator].Operator + (ff.Value == null ? "NULL" : FormatSQLValue(ff));
+                    concat = " " + ff.Concatenator.ToString().ToUpper() + " ";
+                }
             }
             return (s).Trim();
 		}
@@ -90,7 +95,7 @@ namespace Amica.Data
         {
             switch (f.Value.GetType().Name)
             {
-                case "String": return "'" + OpDict[f.Operator].Prefix + ((string)f.Value).Replace("'", "''") + OpDict[f.Operator].Suffix + "'";
+                case "String": return "'" + OpDict[f.Comparator].Prefix + ((string)f.Value).Replace("'", "''") + OpDict[f.Comparator].Suffix + "'";
                 case "DateTime": return "'" + ((DateTime)f.Value).ToString("yyyy/MM/dd hh:mm:ss") + "'";
                 case "Boolean": return (bool)f.Value ? "TRUE" : "FALSE";
                 default: return f.Value.ToString();
