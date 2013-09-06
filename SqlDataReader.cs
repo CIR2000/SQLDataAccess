@@ -83,8 +83,24 @@ namespace Amica.Data
                     concat = " " + ff.Concatenator.ToString().ToUpper() + " ";
                 }
             }
-            return (s).Trim();
+            return s.Trim();
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sorts"></param>
+        /// <returns></returns>
+        protected new string ParseSorts(IList<Sort> sorts)
+        {
+            string s="";
+
+            foreach (Sort srt in sorts)
+            {
+                s += srt.Field + " " + srt.Direction.ToString().ToUpper() + " ";
+            }
+            return s.Trim();
+        }
 
         /// <summary>
         /// 
