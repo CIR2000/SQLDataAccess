@@ -68,14 +68,14 @@ namespace Amica.Data
 
             foreach (IFilter f in filters)
             {
-                if (f.GetType().Name == "FiltersGroup")
+                if (f is FiltersGroup)
                 {
                     fg = (FiltersGroup)f;
                     if (fg.Filters.Count > 0)
                         s += concat + "(" + ParseFilters(fg.Filters) + ")";
                     concat = " " + fg.Concatenator.ToString().ToUpper() + " ";
                 }
-                else if (f.GetType().Name == "Filter")
+                else if (f is Filter)
                 {
                     ff = (Filter)f;
                     s += concat;
