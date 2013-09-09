@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Amica;
 using Amica.Data;
 using DataAccess;
@@ -61,7 +62,7 @@ namespace Amica.Data
         /// <returns></returns>
         protected new string ParseFilters(IList<IFilter> filters)
         {
-            string s = "";
+			var s = new StringBuilder ();
             string concat = "";
             Filter ff;
             FiltersGroup fg;
@@ -71,19 +72,19 @@ namespace Amica.Data
                 if (f is FiltersGroup)
                 {
                     fg = (FiltersGroup)f;
-                    if (fg.Filters.Count > 0)
-                        s += concat + "(" + ParseFilters(fg.Filters) + ")";
+					if (fg.Filters.Count > 0)
+						s.Append (concat + "(" + ParseFilters (fg.Filters) + ")");
                     concat = " " + fg.Concatenator.ToString().ToUpper() + " ";
                 }
                 else if (f is Filter)
                 {
                     ff = (Filter)f;
-                    s += concat;
-                    s += ff.Field + OpDict[ff.Comparator].Operator + (ff.Value == null ? "NULL" : FormatSQLValue(ff));
+                    s.Append(concat);
+                    s.Append(ff.Field + OpDict[ff.Comparator].Operator + (ff.Value == null ? "NULL" : FormatSQLValue(ff)));
                     concat = " " + ff.Concatenator.ToString().ToUpper() + " ";
                 }
             }
-            return s.Trim();
+            return s.ToString().Trim();
 		}
 
         /// <summary>
@@ -93,13 +94,13 @@ namespace Amica.Data
         /// <returns></returns>
         protected new string ParseSorts(IList<Sort> sorts)
         {
-            string s="";
+			var s = new StringBuilder();
 
             foreach (Sort srt in sorts)
             {
-                s += srt.Field + " " + srt.Direction.ToString().ToUpper() + " ";
+                s.Append(srt.Field + " " + srt.Direction.ToString().ToUpper() + " ");
             }
-            return s.Trim();
+            return s.ToString().Trim();
         }
 
         /// <summary>
