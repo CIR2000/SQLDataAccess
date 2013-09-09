@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Amica;
 using Amica.Data;
 using DataAccess;
@@ -59,31 +60,31 @@ namespace Amica.Data
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        protected new string ParseFilters(IList<IFilter> filters)
+        protected string ParseFilters(IList<IFilter> filters)
         {
-            string s = "";
+			var s = new StringBuilder ();
             string concat = "";
             Filter ff;
             FiltersGroup fg;
 
             foreach (IFilter f in filters)
             {
-                if (f.GetType().Name == "FiltersGroup")
+                if (f is FiltersGroup)
                 {
                     fg = (FiltersGroup)f;
-                    if (fg.Filters.Count > 0)
-                        s += concat + "(" + ParseFilters(fg.Filters) + ")";
+					if (fg.Filters.Count > 0)
+						s.Append (concat + "(" + ParseFilters (fg.Filters) + ")");
                     concat = " " + fg.Concatenator.ToString().ToUpper() + " ";
                 }
-                else if (f.GetType().Name == "Filter")
+                else if (f is Filter)
                 {
                     ff = (Filter)f;
-                    s += concat;
-                    s += ff.Field + OpDict[ff.Comparator].Operator + (ff.Value == null ? "NULL" : FormatSQLValue(ff));
+                    s.Append(concat);
+                    s.Append(ff.Field + OpDict[ff.Comparator].Operator + (ff.Value == null ? "NULL" : FormatSQLValue(ff)));
                     concat = " " + ff.Concatenator.ToString().ToUpper() + " ";
                 }
             }
-            return s.Trim();
+			return s.ToString ();
 		}
 
         /// <summary>
@@ -91,15 +92,15 @@ namespace Amica.Data
         /// </summary>
         /// <param name="sorts"></param>
         /// <returns></returns>
-        protected new string ParseSorts(IList<Sort> sorts)
+        protected string ParseSorts(IList<Sort> sorts)
         {
-            string s="";
+			var s = new StringBuilder();
 
             foreach (Sort srt in sorts)
             {
-                s += srt.Field + " " + srt.Direction.ToString().ToUpper() + " ";
+                s.Append(srt.Field + " " + srt.Direction.ToString().ToUpper() + " ");
             }
-            return s.Trim();
+			return s.ToString ();
         }
 
         /// <summary>
@@ -109,14 +110,15 @@ namespace Amica.Data
         /// <returns></returns>
         private string FormatSQLValue(Filter f)
         {
-            switch (f.Value.GetType().Name)
-            {
-                case "String": return "'" + OpDict[f.Comparator].Prefix + ((string)f.Value).Replace("'", "''") + OpDict[f.Comparator].Suffix + "'";
-                case "DateTime": return "'" + ((DateTime)f.Value).ToString("yyyy/MM/dd hh:mm:ss") + "'";
-                case "Boolean": return (bool)f.Value ? "TRUE" : "FALSE";
-                default: return f.Value.ToString();
-            }                
-        }
+			if (f.Value is string)
+                return "'" + OpDict[f.Comparator].Prefix + ((string)f.Value).Replace("'", "''") + OpDict[f.Comparator].Suffix + "'";
+			else if (f.Value is DateTime)
+                return "'" + ((DateTime)f.Value).ToString("yyyy/MM/dd hh:mm:ss") + "'";
+			else if (f.Value is bool)
+                return (bool)f.Value ? "TRUE" : "FALSE";
+			else
+                return f.Value.ToString();
+		}
 
         /// <summary>
         /// 
