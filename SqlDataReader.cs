@@ -60,7 +60,7 @@ namespace Amica.Data
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        protected new string ParseFilters(IList<IFilter> filters)
+        protected string ParseFilters(IList<IFilter> filters)
         {
 			var s = new StringBuilder ();
             string concat = "";
