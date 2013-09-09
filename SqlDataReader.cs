@@ -84,7 +84,7 @@ namespace Amica.Data
                     concat = " " + ff.Concatenator.ToString().ToUpper() + " ";
                 }
             }
-            return s.ToString().Trim();
+			return s.ToString ();
 		}
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Amica.Data
             {
                 s.Append(srt.Field + " " + srt.Direction.ToString().ToUpper() + " ");
             }
-            return s.ToString().Trim();
+			return s.ToString ();
         }
 
         /// <summary>
