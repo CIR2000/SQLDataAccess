@@ -110,14 +110,15 @@ namespace Amica.Data
         /// <returns></returns>
         private string FormatSQLValue(Filter f)
         {
-            switch (f.Value.GetType().Name)
-            {
-                case "String": return "'" + OpDict[f.Comparator].Prefix + ((string)f.Value).Replace("'", "''") + OpDict[f.Comparator].Suffix + "'";
-                case "DateTime": return "'" + ((DateTime)f.Value).ToString("yyyy/MM/dd hh:mm:ss") + "'";
-                case "Boolean": return (bool)f.Value ? "TRUE" : "FALSE";
-                default: return f.Value.ToString();
-            }                
-        }
+			if (f.Value is string)
+                return "'" + OpDict[f.Comparator].Prefix + ((string)f.Value).Replace("'", "''") + OpDict[f.Comparator].Suffix + "'";
+			else if (f.Value is DateTime)
+                return "'" + ((DateTime)f.Value).ToString("yyyy/MM/dd hh:mm:ss") + "'";
+			else if (f.Value is bool)
+                return (bool)f.Value ? "TRUE" : "FALSE";
+			else
+                return f.Value.ToString();
+		}
 
         /// <summary>
         /// 
