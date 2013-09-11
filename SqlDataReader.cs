@@ -92,7 +92,7 @@ namespace Amica.Data
         /// </summary>
         /// <param name="sorts"></param>
         /// <returns></returns>
-        protected string ParseSorts(IList<Sort> sorts)
+        protected string ParseSort(IList<Sort> sorts)
         {
 			var s = new StringBuilder();
 
