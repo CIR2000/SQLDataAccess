@@ -60,7 +60,7 @@ namespace Amica.Data
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        protected string ParseFilters(IList<IFilter> filters)
+        protected override string ParseFilters(IList<IFilter> filters)
         {
 			var s = new StringBuilder ();
             string concat = "";
@@ -92,7 +92,7 @@ namespace Amica.Data
         /// </summary>
         /// <param name="sorts"></param>
         /// <returns></returns>
-        protected string ParseSort(IList<Sort> sorts)
+        protected override string ParseSort(IList<Sort> sorts)
         {
 			var s = new StringBuilder();
 
