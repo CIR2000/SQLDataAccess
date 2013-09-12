@@ -51,6 +51,27 @@ namespace Amica.Data
         }
 
         /// <summary>
+        /// Asynchronously gets one or multiple documents from the datasource.
+        /// <param name="request">The request instance.</param>
+        /// <param name="callback">The callback function to be invoked.</param>
+        /// <typeparam name="T">The type to be returned.</typeparam>
+        public override void GetAsync<T>(IGetRequest request, Action<Response<T>, IGetRequest> callback)
+        {
+            // TODO return response: not implemented
+        }
+
+        /// <summary>
+        /// Asynchronously gets one document from the datasource.
+        /// </summary>
+        /// <param name="request">The request instance.</param>
+        /// <param name="callback">The callback function to be invoked.</param>
+        /// <typeparam name="T">The type to be returned.</typeparam>
+        public override void GetAsync<T>(IGetRequestItem request, Action<Response<T>, IGetRequestItem> callback)
+        {
+            // TODO return response: not implemented
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         public string DataSourcePassword { get; set; }
