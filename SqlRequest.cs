@@ -3,7 +3,7 @@ using DataAccess;
 
 namespace Amica.Data
 {
-    public class SqlGetRequest : GetRequest
+    public class SqlRequest : Request
     {
         public string DataSourcePassword { get; set; }
     }
