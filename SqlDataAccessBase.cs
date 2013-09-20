@@ -8,7 +8,7 @@ using DataAccess;
 
 namespace Amica.Data
 {
-    public class SqlDataReader : DataAccessBase
+    public class SqlDataAccessBase : DataAccessBase
     {
         /// <summary>
         /// 
@@ -30,9 +30,7 @@ namespace Amica.Data
         /// <summary>
         /// 
         /// </summary>
-        public SqlDataReader()
-        {
-        }
+        public SqlDataAccessBase() { }
 
         /// <summary>
         /// Execute the specified request.
