@@ -8,7 +8,7 @@ using DataAccess;
 
 namespace Amica.Data
 {
-    public class SqlDataReader : DataReader
+    public class SqlDataReader : DataAccessBase
     {
         /// <summary>
         /// 
@@ -34,39 +34,23 @@ namespace Amica.Data
         {
         }
 
-        public override Response<T> Get<T>(IGetRequest request)
+        /// <summary>
+        /// Execute the specified request.
+        /// </summary>
+        /// <param name="request">Request.</param>
+        /// <typeparam name="T">The expected return type .</typeparam>
+        public override Response<T> Execute<T>(IRequest request)
         {
             return null;
         }
 
         /// <summary>
-        /// 
+        /// Executes an async request.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public override Response<T> Get<T>(IGetRequestItem request)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Asynchronously gets one or multiple documents from the datasource.
-        /// <param name="request">The request instance.</param>
-        /// <param name="callback">The callback function to be invoked.</param>
-        /// <typeparam name="T">The type to be returned.</typeparam>
-        public override void GetAsync<T>(IGetRequest request, Action<Response<T>, IGetRequest> callback)
-        {
-            // TODO return response: not implemented
-        }
-
-        /// <summary>
-        /// Asynchronously gets one document from the datasource.
-        /// </summary>
-        /// <param name="request">The request instance.</param>
-        /// <param name="callback">The callback function to be invoked.</param>
-        /// <typeparam name="T">The type to be returned.</typeparam>
-        public override void GetAsync<T>(IGetRequestItem request, Action<Response<T>, IGetRequestItem> callback)
+        /// <param name="request">Request.</param>
+        /// <param name="callback">Callback.</param>
+        /// <typeparam name="T">The expected return type.</typeparam>
+        public override void ExecuteAsync<T>(IRequest request, Action<Response<T>, IRequest> callback)
         {
             // TODO return response: not implemented
         }
