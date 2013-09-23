@@ -59,6 +59,21 @@ namespace Amica.Data
         public string DataSourcePassword { get; set; }
 
         /// <summary>
+        /// Build SQL string from request info
+        /// </summary>
+        /// <param name="request">Request from which to construct the SqlString</param>
+        protected string BuildSqlString(SqlRequest request)
+        {
+            string sqlSelect = "SELECT * FROM " + request.Resource;
+            string sqlFilter = ParseFilters(request.Filters);
+            string sqlOrder = ParseSort(request.Sort);
+            sqlSelect += sqlFilter != "" ? " WHERE " + sqlFilter : "";
+            sqlSelect += sqlFilter != "" ? " ORDER BY " + sqlOrder : "";
+            //System.Diagnostics.Debug.Print(sqlSelect);
+            return sqlSelect;
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="filters"></param>
