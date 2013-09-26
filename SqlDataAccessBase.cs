@@ -5,7 +5,6 @@ using Amica;
 using Amica.Data;
 using DataAccess;
 
-
 namespace Amica.Data
 {
     public class SqlDataAccessBase : DataAccessBase
@@ -74,9 +73,8 @@ namespace Amica.Data
                 sqlOrder = ParseSort(request.Sort);
             }
             else
-            {
-                sqlFilter = " WHERE Id=" + request.DocumentId.ToString();
-            }
+                sqlFilter = "Id=" + request.DocumentId.ToString();
+
             sb.Append(sqlFilter != "" ? " WHERE " + sqlFilter : "");
             sb.Append(sqlOrder != "" ? " ORDER BY " + sqlOrder : "");
             //System.Diagnostics.Debug.Print(sqlSelect);
