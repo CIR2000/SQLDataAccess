@@ -74,6 +74,8 @@ namespace Amica.Data
             }
             else
                 sbFilter.Append("Id=" + request.DocumentId.ToString());
+            if (request.IfModifiedSince != null)
+                sbFilter.Append(" AND [TimeStamp] >= " + "'" + ((DateTime)request.IfModifiedSince).ToString("MM/dd/yyyy HH:mm:ss") + "'");
             sbSelect.Append(sbFilter.ToString() != "" ? " WHERE " + sbFilter.ToString() : "");
             sbSelect.Append(sqlOrder != "" ? " ORDER BY " + sqlOrder : "");
             return sbSelect.ToString();
