@@ -63,22 +63,20 @@ namespace Amica.Data
         /// <param name="request">Request from which to construct the SqlString</param>
         protected string BuildSqlString(SqlRequest request)
         {
-            StringBuilder sb = new StringBuilder("SELECT * FROM ");
-            sb.Append(request.Resource);
-            string sqlFilter = "";
+            StringBuilder sbSelect = new StringBuilder("SELECT * FROM ");
+            StringBuilder sbFilter = new StringBuilder("");
+            sbSelect.Append(request.Resource);
             string sqlOrder = "";
             if (request.DocumentId == null)
             {
-                sqlFilter = ParseFilters(request.Filters);
+                sbFilter.Append(ParseFilters(request.Filters));
                 sqlOrder = ParseSort(request.Sort);
             }
             else
-                sqlFilter = "Id=" + request.DocumentId.ToString();
-
-            sb.Append(sqlFilter != "" ? " WHERE " + sqlFilter : "");
-            sb.Append(sqlOrder != "" ? " ORDER BY " + sqlOrder : "");
-            //System.Diagnostics.Debug.Print(sqlSelect);
-            return sb.ToString();
+                sbFilter.Append("Id=" + request.DocumentId.ToString());
+            sbSelect.Append(sbFilter.ToString() != "" ? " WHERE " + sbFilter.ToString() : "");
+            sbSelect.Append(sqlOrder != "" ? " ORDER BY " + sqlOrder : "");
+            return sbSelect.ToString();
         }
 
         /// <summary>
