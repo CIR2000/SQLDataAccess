@@ -137,7 +137,7 @@ namespace Amica.Data
 			if (f.Value is string)
                 return "'" + OpDict[f.Comparator].Prefix + ((string)f.Value).Replace("'", "''") + OpDict[f.Comparator].Suffix + "'";
 			else if (f.Value is DateTime)
-                return "'" + ((DateTime)f.Value).ToString("yyyy/MM/dd hh:mm:ss") + "'";
+                return "'" + ((DateTime)f.Value).ToString("MM/dd/yyyy HH:mm:ss") + "'";
 			else if (f.Value is bool)
                 return (bool)f.Value ? "TRUE" : "FALSE";
 			else
